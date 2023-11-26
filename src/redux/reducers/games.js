@@ -36,9 +36,6 @@ export default function (state = initialState, action) {
       };
       
     case SET_SCORE:
-      console.log('payload :>> ', payload);
-      console.log('payload.key :>> ', payload.key);
-      console.log('payload.value :>> ', payload.value);
       return {
         ...state,
         scores: {

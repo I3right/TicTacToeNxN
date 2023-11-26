@@ -27,8 +27,6 @@ function App() {
     scores,
   } = useTicTacToe ()
 
-  console.log('scores :>> ', scores['X']);
-
   return (
     <div id='container'>
       <section className='game flex justify-between'>
