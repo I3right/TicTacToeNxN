@@ -146,15 +146,17 @@ const useBoards = (props) => {
     switch (isWin) {
       case 'WIN':
         return (
-          <p className='fixed w-full h-[120px] bg-red-300 text-gray-800 text-[100px] flex justify-center items-center'>
-            {player} - Won
-          </p>
+          <div className='fixed w-full h-[120px] bg-red-200 text-gray-700 flex flex-col justify-center items-center'>
+            <p className='text-[90px]'>{player} - Won</p>
+            <p className='text-[14px]'> click restart on the bootm to play again</p>
+          </div>
         );
       case 'TIE':
         return (
-          <p className='fixed w-full h-[120px] bg-orange-400 text-gray-800 text-[100px] flex justify-center items-center'>
-            TIE
-          </p>
+          <div className='fixed w-full h-[120px] bg-orange-400 text-gray-700 flex flex-col justify-center items-center'>
+            <p className='text-[54px]'>TIE</p>
+            <p className='text-[14px]'> click restart on the bootm to play again</p>
+          </div>
         );
       default:
         return null;

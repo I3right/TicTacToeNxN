@@ -58,7 +58,7 @@ function App() {
           <div className='control-group'>
             <div>
               <img src={resetIcon} alt='reset icon'/>
-              <button onClick={()=>resetGame()}>Reset</button>
+              <button onClick={()=>resetGame()}>Restart</button>
             </div>
             <div>
               <img src={historyIcon} alt='reset icon'/>
