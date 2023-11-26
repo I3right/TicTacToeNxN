@@ -5,9 +5,9 @@ import { ADD_HISTORY, CREATE_BOARD, SET_MOVE } from './redux/actions/history'
 import Boards from 'components/Boards'
 import ModalHistory from 'src/components/ModalHistory'
 import { getGamesState } from './redux/selector'
-import resetIcon from 'src/images/resetIcon.png'
-import historyIcon from 'src/images/historyIcon.png'
-import exitIcon from 'src/images/exitIcon.png'
+import resetIcon from '/public/images/resetIcon.png'
+import historyIcon from '/public/images/historyIcon.png'
+import exitIcon from '/public/images/exitIcon.png'
 import './app.scss'
 
 function App() {

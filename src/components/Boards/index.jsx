@@ -4,7 +4,7 @@ import { getGamesState, getHistoryState } from 'src/redux/selector'
 import { ADD_HISTORY, CREATE_BOARD, SET_CURRENT_BOARD, SET_MOVE, SET_PLAYER_HISTORY } from 'src/redux/actions/history'
 import { GAME_RESET, GAME_START, SET_IS_WIN, SET_PLAYER } from 'src/redux/actions/games'
 import Square from 'components/Square'
-import bgTictacToe from 'src/images/tic-tac-toe.png'
+import bgTictacToe from '/public/images/tic-tac-toe.png'
 
 const Boards = (props) => {
   const {
