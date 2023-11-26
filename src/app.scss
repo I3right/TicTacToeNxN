@@ -3,14 +3,19 @@
 
 #container{
   width: 100%;
-  height: calc(100dvh - 100px);
+  min-height: 100dvh;
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
 
   section.game{
     height: 100%;
     width: 100%;
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 
     #games{
       width: 100%;
@@ -19,18 +24,16 @@
       flex-direction: column;
       justify-content: center;
       align-items: center;
-      position: relative;
+      // position: relative;
 
-      .title{
-        position: absolute;
-        top: 0;
-      }
 
       .board{
         display: flex;
         flex-direction: column;
+        justify-content: center;
+        align-items: center;
         gap: 5px;
-        padding: 16px;
+        margin: 16px;
 
         .row{
             display: flex;
@@ -41,7 +44,7 @@
       .square-container{
           width: 45px;
           height: 45px;
-          background-color: $lightGray;
+          background-color: $gray;
           border-radius: 5px;
           overflow: hidden;
       }
@@ -54,15 +57,31 @@
         align-items: center;
       }
     }
+
+    .poster{
+      width: 100%;
+      height: 100%;
+
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      gap: 20px;
+    }
   }
 
   section.game-controller{
     width: 100%;
     height: 100px;
-    background-color: beige;
-    position: fixed;
-    bottom: 0;
+    background-color: rgb(244, 244, 233);
+    display: flex;
+    justify-content: center;
+    align-items: center;
 
+    .container{
+      max-width: 500px;
+      position: relative;
+    }
 
     .size-controller{
       width: 100%;
@@ -99,6 +118,34 @@
         outline: 1px solid red;
       }
     }
+
+    .control-group{
+      display: flex;
+      justify-content: space-between;
+      
+      > div {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+      img{
+        width: 15px;
+        height: 15px;
+      }
+    }
+
+    .score{
+      position: fixed;
+      bottom: 10px;
+    }
+
+    .score-x{
+      left: 20px;
+    }
+
+    .score-y{
+      right: 20px;
+    }
   }
 
   #history{
@@ -118,7 +165,7 @@
       align-items: center;
       position: relative;
       
-      h2{
+      h3{
         font-size: 20px;
         font-weight: 700;
       }

@@ -17,7 +17,7 @@ const ModalHistory = (props) => {
     {isOpen && 
     <div id='history'>
       <header>
-        <h2 toggle={toggle}>History</h2>
+        <h3>History</h3>
         <button className='btn-close' onClick={()=>toggle()}>X</button>
       </header>
       <div>

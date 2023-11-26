@@ -1,11 +1,14 @@
 import { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { GAME_RESET, GAME_START, SET_IS_WIN, SET_PLAYER } from './redux/actions/games'
+import { END_GAME, GAME_RESET, GAME_START, SET_IS_WIN, SET_PLAYER, SET_SCORE } from './redux/actions/games'
+import { ADD_HISTORY, CREATE_BOARD, SET_MOVE } from './redux/actions/history'
 import Boards from 'components/Boards'
 import ModalHistory from 'src/components/ModalHistory'
 import { getGamesState } from './redux/selector'
+import resetIcon from 'src/images/resetIcon.png'
+import historyIcon from 'src/images/historyIcon.png'
+import exitIcon from 'src/images/exitIcon.png'
 import './app.scss'
-import { ADD_HISTORY, CREATE_BOARD, SET_MOVE } from './redux/actions/history'
 
 function App() {
   const {
@@ -14,45 +17,70 @@ function App() {
     resetGame,
     createBoardGame,
     setisWin,
+    setScore,
     setIsOpenModalHistory,
+    closegame,
     size,
     isUpdateSize,
     isOpenModalHistory,
     isError,
+    scores,
   } = useTicTacToe ()
+
+  console.log('scores :>> ', scores['X']);
+
   return (
     <div id='container'>
-      <section className='game flex justify-between max-w-[1000px]'>
+      <section className='game flex justify-between'>
         <Boards 
           size={size} 
           isUpdateSize={isUpdateSize} 
           resetGame={resetGame} 
           createBoardGame={createBoardGame}
-          setisWin={setisWin} />
+          setisWin={setisWin}
+          setScore={setScore} />
       </section>
 
       <section className='game-controller'>
-        {!isUpdateSize && <div className='size-controller flex flex-col'>
-          <div className='input-group'>
-            <input 
-              className={`input-size ${isError? 'input-error':''}`}
-              type='number' 
-              min={3}
-              max={50}
-              onChange={(val)=>handleChangeSizeBoard(parseInt(val.target.value))} 
-              value={size.value}
-              placeholder='Please enter the size of the board'
-              />
-            <button onClick={()=>startGame()}>START GAME</button>
+        <div className='container'>
+          {!isUpdateSize && <div className='size-controller flex flex-col'>
+            <div className='input-group'>
+              <input 
+                className={`input-size ${isError? 'input-error':''}`}
+                type='number' 
+                onChange={(val)=>handleChangeSizeBoard(parseInt(val.target.value))} 
+                value={size.value}
+                placeholder='Please enter the size of the board'
+                />
+              <button onClick={()=>startGame()}>START GAME</button>
+            </div>
+            <p className='text-xs text-red-700'>FYI: Size of the board 3 - 15 for the best gaming experience.</p>
+          </div>}
+          {isUpdateSize && <>
+          <div className='control-group'>
+            <div>
+              <img src={resetIcon} alt='reset icon'/>
+              <button onClick={()=>resetGame()}>Reset</button>
+            </div>
+            <div>
+              <img src={historyIcon} alt='reset icon'/>
+              <button onClick={()=>setIsOpenModalHistory(prev=>!prev)}>View history</button>
+            </div>
+            <div>
+              <img src={exitIcon} alt='reset icon'/>
+              <button onClick={()=>closegame()}>END GAME</button>
+            </div>
           </div>
-          <p className='text-xs text-red-700'>FYI: Size of the board 3 - 15 for the best gaming experience.</p>
-        </div>}
-        {isUpdateSize && <div className='control-group'>
-          <div>
-            <button onClick={()=>resetGame()}>Reset</button>
+          <div className='score-container'>
+            <div className='score score-x'>
+              <h2 className='text-[red] text-[50px]'> X : {scores['X'].score } </h2>
+            </div>
+            <div className='score score-y'>
+              <h2 className='text-[blue] text-[50px]'> O : {scores['O'].score } </h2>
+            </div>
           </div>
-          <button onClick={()=>setIsOpenModalHistory(prev=>!prev)}>View history</button>
-        </div>}
+          </>}
+        </div>
       </section>
       <ModalHistory isOpen={isOpenModalHistory} toggle={()=>setIsOpenModalHistory(prev=>!prev)}/>
     </div>
@@ -61,15 +89,15 @@ function App() {
 
 const useTicTacToe = () => {
   const dispatch = useDispatch()
-  const gameState = useSelector(getGamesState);
-  const { isWin, player, scores } = gameState;
-  const [size, setSize] = useState({value:3, isEdit: false})
+  const gameState = useSelector(getGamesState)
+  const {scores} = gameState
+  const [size, setSize] = useState({value:'', isEdit: false})
   const [isUpdateSize, setIsUpdateSize] = useState(false)
   const [isOpenModalHistory, setIsOpenModalHistory] = useState(false)
   const [isError, setIsError] = useState(false)
 
   const startGame = () => {
-    if(size.value >= 3 && size.value <= 15){
+    if(size.value >= 3 && size.value <= 25){
       dispatch({type: GAME_START })
       setIsUpdateSize(true)
     } else {
@@ -80,10 +108,20 @@ const useTicTacToe = () => {
   const resetGame = () => {
     dispatch({type: GAME_RESET })
     createBoardGame()
-    setisWin(false)
+    setisWin('')
     dispatch({type: SET_PLAYER, payload:{value:'X'}})
     dispatch({type: SET_MOVE,   payload:{value: 0} })
     dispatch({type: SET_IS_WIN, payload:{value: ''} })
+  }
+
+  const closegame = () => {
+    setIsUpdateSize(false)
+    dispatch({type: END_GAME})
+    setIsError(false)
+    setIsOpenModalHistory(false)
+    setSize({value:'', isEdit: false})
+    resetGame()
+    resetScore()
   }
 
   const createBoardGame = () => {
@@ -102,9 +140,18 @@ const useTicTacToe = () => {
   const setisWin = (value) => {
     dispatch({type: SET_IS_WIN, payload:{value: value} })
   };
+  
+  const setScore = (player, score) => {
+    dispatch({type: SET_SCORE, payload:{key: player, value: score} })
+  }
+
+  const resetScore = () => {
+    dispatch({type: SET_SCORE, payload:{key: 'X', value: 0} })
+    dispatch({type: SET_SCORE, payload:{key: 'O', value: 0} })
+  }
 
   const handleChangeSizeBoard = (val) => {
-    if(val >= 3 && val <= 15 ) {
+    if(val > 0 && val <= 25 ) {
       setSize((prev) => ({ 
         ...prev,
         value   : parseInt(val),
@@ -120,11 +167,14 @@ const useTicTacToe = () => {
     resetGame,
     createBoardGame,
     setisWin,
+    setScore,
     setIsOpenModalHistory,
+    closegame,
     size,
     isUpdateSize,
     isOpenModalHistory,
     isError,
+    scores,
   }
 }
 

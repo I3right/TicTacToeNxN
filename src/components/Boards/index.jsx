@@ -4,6 +4,7 @@ import { getGamesState, getHistoryState } from 'src/redux/selector'
 import { ADD_HISTORY, CREATE_BOARD, SET_CURRENT_BOARD, SET_MOVE, SET_PLAYER_HISTORY } from 'src/redux/actions/history'
 import { GAME_RESET, GAME_START, SET_IS_WIN, SET_PLAYER } from 'src/redux/actions/games'
 import Square from 'components/Square'
+import bgTictacToe from 'src/images/tic-tac-toe.png'
 
 const Boards = (props) => {
   const {
@@ -17,9 +18,10 @@ const Boards = (props) => {
 
   return (
     <>
-    {isUpdateSize && <div id='games'>
-      <span className='title'>Tic Tac Toe Games</span>
-
+    <div id='games'>
+    {isUpdateSize? 
+      <>
+      <h1>Tic Tac Toe</h1>
       <div className='board'>
         {currentBoard.map((row,rowIndex) => {
           return (
@@ -35,8 +37,14 @@ const Boards = (props) => {
         })}
       </div>
       {gameBanner()}
+      </> :
+      <div className='poster'>
+        <h1>Tic Tac Toe</h1>
+        <img src={bgTictacToe} alt='background image tic tac toe' />
+      </div>
 
-    </div>}
+    }
+    </div>
     
     </>
   )
@@ -48,9 +56,7 @@ const useBoards = (props) => {
   const gameState = useSelector(getGamesState);
   const { boardHistory, playerHistory, currentBoard, move } = historyState
   const { isWin, player, scores } = gameState;
-  const { size, resetGame, createBoardGame, setisWin } = props
-  
-  console.log('size :>> ', size);
+  const { size, resetGame, createBoardGame, setisWin, setScore } = props
 
   useEffect(()=>{
     createBoardGame()
@@ -61,12 +67,14 @@ const useBoards = (props) => {
       const selectSQ = currentBoard[square.Y][square.X];
       if(selectSQ.value === '') {
         const currentArr = [...JSON.parse(JSON.stringify(currentBoard))]
+        const scoreUpdated = scores[player].score + 1 ;
         currentArr[square.Y][square.X].value = player
         addHistory(currentArr,boardHistory)  
         dispatch({type: SET_CURRENT_BOARD, payload:{value: currentArr} })
         dispatch({type: SET_MOVE, payload:{value: move+1 } })
         if(checkWin(currentArr)) {
           setisWin('WIN')
+          setScore(player,scoreUpdated)
         } else {
           switchPlayer()
         }
@@ -138,13 +146,13 @@ const useBoards = (props) => {
     switch (isWin) {
       case 'WIN':
         return (
-          <p className='fixed w-full h-[200px] bg-red-300 text-gray-800 text-[100px] flex justify-center items-center'>
+          <p className='fixed w-full h-[120px] bg-red-300 text-gray-800 text-[100px] flex justify-center items-center'>
             {player} - Won
           </p>
         );
       case 'TIE':
         return (
-          <p className='fixed w-full h-[200px] bg-red-300 text-gray-800 text-[100px] flex justify-center items-center'>
+          <p className='fixed w-full h-[120px] bg-orange-400 text-gray-800 text-[100px] flex justify-center items-center'>
             TIE
           </p>
         );

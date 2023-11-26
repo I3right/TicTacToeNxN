@@ -2,6 +2,8 @@
 @tailwind components;
 @tailwind utilities;
 @import url('https://fonts.googleapis.com/css2?family=Exo+2:wght@100;200;300;400;500;600;700;800;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Lilita+One&display=swap');
+
 @import './variable.scss';
 
 *{
@@ -12,6 +14,14 @@
 
 body{
   font-family: 'Exo 2', sans-serif;
-  background-color: $gray;
+  background-color: $lightGray;
   height: 100dvh;
+}
+
+h1,h2,h3,h4,h5,h6{
+  font-family: 'Lilita One', sans-serif;
+}
+
+h1{
+font-size: 50px;
 }
